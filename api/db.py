@@ -22,7 +22,6 @@ def user_exists(user):
             conn.close()
     return count > 0
 
-
 def login(username, password):
     try:
         with get_connection() as conn:
@@ -43,28 +42,6 @@ def login(username, password):
             cur.close()
             conn.close()
         return user
-    
-def get_quartos():
-    try:
-        with get_connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute("SELECT * FROM quartos")
-                matchs = []
-                for match_tuple in cur.fetchall():
-                    match = {
-                        "id_quarto": match_tuple[0],
-                        "id_user": match_tuple[1],
-                        "tipo_t": match_tuple[2],
-                        "disponibilidade": match_tuple[3]
-                    }
-                    matchs.append(match)
-    except (Exception, psycopg2.Error) as error :
-        print ("Error while connecting to PostgreSQL", error)
-    finally:
-        if(conn):
-            cur.close()
-            conn.close()
-        return matchs
     
 def insert_reserva():
     try:
@@ -87,3 +64,17 @@ def insert_reserva():
             cur.close()
             conn.close()
         return matchs
+    
+def get_disponibilidade(id_quarto, data):
+    try:
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute("EXECUTE PROCEDURE quarto_disponivel(%s, %s)", [id_quarto, data])
+                disponivel = cur.fetchone()
+    except (Exception, psycopg2.Error) as error :
+        print ("Error while connecting to PostgreSQL", error)
+    finally:
+        if(conn):
+            cur.close()
+            conn.close()
+        return disponivel

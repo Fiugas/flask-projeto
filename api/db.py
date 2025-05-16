@@ -3,11 +3,11 @@ from re import I
 
 import psycopg2
 
-
+# Conexão à BD
 def get_connection():
     return psycopg2.connect(host="aid.estgoh.ipc.pt", database="db2021155919", user="a2021155919", password="a2021155919")
-    #return psycopg2.connect(host=os.environ.get("DATABASE_HOST"), database = os.environ.get("DATABASE_NAME"), user=os.environ.get("DATABASE_USER"), password = os.environ.get("PASSWORD"))
 
+# Verifica se o utilizador existe
 def user_exists(user):
     try:
         with get_connection() as conn:
@@ -22,6 +22,7 @@ def user_exists(user):
             conn.close()
     return count > 0
 
+# Login
 def login(username, password):
     try:
         with get_connection() as conn:
@@ -42,7 +43,8 @@ def login(username, password):
             cur.close()
             conn.close()
         return user
-    
+
+# Insere reserva
 def insert_reserva():
     try:
         with get_connection() as conn:
@@ -64,7 +66,8 @@ def insert_reserva():
             cur.close()
             conn.close()
         return matchs
-    
+
+# Verifica disponibilidade
 def get_disponibilidade(id_quarto, data):
     try:
         with get_connection() as conn:
@@ -78,3 +81,19 @@ def get_disponibilidade(id_quarto, data):
             cur.close()
             conn.close()
         return disponivel
+
+# X - Incompleto 
+def pagamento():
+    return "X"
+
+# X - Incompleto 
+def cancel():
+    return "X"
+
+# X - Incompleto 
+def upload():
+    return "X"
+
+# X - Incompleto 
+def ver_imagem():
+    return "X"
